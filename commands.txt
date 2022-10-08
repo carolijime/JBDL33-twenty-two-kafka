@@ -1,0 +1,14 @@
+#~/kafka_2.13-3.3.1/bin/zookeeper-server-start.sh ~/kafka_2.13-3.3.1/config/zookeeper.properties
+#~/kafka_2.13-3.3.1/bin/kafka-server-start.sh ~/kafka_2.13-3.3.1/config/server.properties
+
+#start zookeeper and kafka (in that order)
+~/kafka/bin/zookeeper-server-start.sh ~/kafka/config/zookeeper.properties
+~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties
+
+#Create a Topic in Kafka
+~/kafka/bin/kafka-topics.sh --create --topic sample_topic --bootstrap-server localhost:9092 
+~/kafka/bin/kafka-topics.sh --create --topic sample_topic_partitioned --bootstrap-server localhost:9092 --partitions 3
+
+
+#See Topic
+~/kafka/bin/kafka-topics.sh --describe --topic sample_topic --bootstrap-server localhost:9092
