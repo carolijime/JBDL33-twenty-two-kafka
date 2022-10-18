@@ -1,6 +1,9 @@
 #~/kafka_2.13-3.3.1/bin/zookeeper-server-start.sh ~/kafka_2.13-3.3.1/config/zookeeper.properties
 #~/kafka_2.13-3.3.1/bin/kafka-server-start.sh ~/kafka_2.13-3.3.1/config/server.properties
 
+#vi commands
+https://www.cs.colostate.edu/helpdocs/vi.html
+
 #start zookeeper and kafka (in that order)
 ~/kafka/bin/zookeeper-server-start.sh ~/kafka/config/zookeeper.properties
 ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties
@@ -12,3 +15,57 @@
 
 #See Topic
 ~/kafka/bin/kafka-topics.sh --describe --topic sample_topic --bootstrap-server localhost:9092
+~/kafka/bin/kafka-topics.sh --describe --topic sample_topic_partitioned --bootstrap-server localhost:9092
+
+#Create kafka another (second) node in same machine
+cp ~/kafka/config/server.properties ~/kafka/config/server2.properties
+
+#create logs folder for second node
+mkdir /tmp/kafka-logs2
+
+#view properties file
+vi  ~/kafka/config/server2.properties
+
+#below changes to properties file
+--change port number
+listeners = localhost:9093listeners = PLAINTEXT://localhost:9093
+--change broker id
+broker.id=1
+
+--change logs dir
+log.dirs=/tmp/kafka-logs2
+
+
+#view log of one topic
+vi /tmp/kafka-logs/sample_topic-0/
+vi /tmp/kafka-logs/sample_topic-0/00000000000000000000.log
+
+#run secondary node in kafka
+~/kafka/bin/kafka-server-start.sh ~/kafka/config/server2.properties
+
+
+#exit vi (without saving changes)
+:q!
+
+#save changes in vi
+:wq
+
+#make changes
+^i (shift + i)
+
+#create topic in kafka with replication-factor (having 2 kaffa nodes running) - need to just specify one host, but will be using 2 ports
+~/kafka/bin/kafka-topics.sh --create --topic sample_topic_partitioned_rf --bootstrap-server localhost:9092 --partitions 3 -replication-factor 2
+
+#create consumer (all created will be in different consumer groups)
+~/kafka/bin/kafka-console-consumer.sh --topic sample_topic_partitioned_rf --bootstrap-server localhost:9092
+
+#create consumer (specify consumer group)
+~/kafka/bin/kafka-console-consumer.sh --topic sample_topic_partitioned_rf --bootstrap-server localhost:9092 --group g1
+
+#produce messages (we can use either localhost port)
+~/kafka/bin/kafka-console-producer.sh --bootstrap-server localhost:9093 --topic sample_topic_partitioned_rf 
+--write message in console-producer
+
+#see consumers
+~/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group g1 --describe --members
+
