@@ -1,5 +1,7 @@
-#~/kafka_2.13-3.3.1/bin/zookeeper-server-start.sh ~/kafka_2.13-3.3.1/config/zookeeper.properties
-#~/kafka_2.13-3.3.1/bin/kafka-server-start.sh ~/kafka_2.13-3.3.1/config/server.properties
+#Install kafka in windows
+https://kafka.apache.org/downloads
+https://tecadmin.net/how-to-install-apache-kafka-on-ubuntu-22-04/
+https://tecadmin.net/how-to-install-apache-kafka-on-ubuntu-22-04/
 
 #vi commands
 https://www.cs.colostate.edu/helpdocs/vi.html
